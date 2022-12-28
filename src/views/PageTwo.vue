@@ -1,5 +1,5 @@
 <template>
-  <div>你好</div>
+  <div>页面2</div>
 </template>
 
 <script>

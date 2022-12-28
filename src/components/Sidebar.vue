@@ -1,23 +1,38 @@
 <template>
   <el-menu
-    default-active="1-4-1"
+    default-active="home"
     class="el-menu-vertical-demo"
-    @open="handleOpen"
-    @close="handleClose"
-    :collapse="isCollapse"
+    :collapse="false"
+    background-color="#1e2e3d"
+    text-color="#e1e1e1"
+    active-text-color="#1B6FC6"
+    :router="true"
   >
-    <el-menu-item index="2">
-      <i class="el-icon-menu"></i>
-      <span slot="title">导航二</span>
+    <h3>白家农产品C1区系统</h3>
+    <el-menu-item
+      v-for="item in hasNoChild"
+      :key="item.name"
+      :index="item.path + ''"
+    >
+      <i :class="`el-icon-${item.icon}`"></i>
+      <span slot="title">{{ item.label }}</span>
     </el-menu-item>
 
-    <el-submenu index="1">
+    <el-submenu
+      :index="item.path + ''"
+      v-for="item in hasChild"
+      :key="item.name"
+    >
       <template slot="title">
-        <i class="el-icon-location"></i>
-        <span slot="title">导航一</span>
+        <i :class="`el-icon-${item.icon}`"></i>
+        <span slot="title">{{ item.label }}</span>
       </template>
-      <el-menu-item index="1-1">选项1</el-menu-item>
-      <el-menu-item index="1-2">选项2</el-menu-item>
+      <el-menu-item
+        :index="subItem.path + ''"
+        v-for="subItem in item.children"
+        :key="subItem.path"
+        >{{ subItem.label }}</el-menu-item
+      >
     </el-submenu>
   </el-menu>
 </template>
@@ -26,17 +41,16 @@
 export default {
   data() {
     return {
-      isCollapse: false,
       menuData: [
         {
-          path: "/",
+          path: "/home",
           name: "home",
           label: "首页",
           icon: "s-home",
           url: "Home/Home",
         },
         {
-          path: "/mall",
+          path: "/mail",
           name: "mall",
           label: "商品管理",
           icon: "video-play",
@@ -54,14 +68,14 @@ export default {
           icon: "location",
           children: [
             {
-              path: "/page1",
+              path: "/pageOne",
               name: "page1",
               label: "页面1",
               icon: "setting",
               url: "Other/PageOne",
             },
             {
-              path: "/page2",
+              path: "/pageTwo",
               name: "page2",
               label: "页面2",
               icon: "setting",
@@ -72,20 +86,35 @@ export default {
       ],
     };
   },
-  methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+  methods: {},
+  computed: {
+    // 计算属性有子菜单的
+    hasChild() {
+      return this.menuData.filter((item) => item.children);
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
+    //没有子菜单的
+    hasNoChild() {
+      return this.menuData.filter((item) => !item.children);
     },
   },
 };
 </script>
 
-<style>
+<style lang="less" scoped>
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+  h3 {
+    margin: 0;
+    padding: 0;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    line-height: 48px;
+  }
+}
+.el-menu {
+  border: none;
+  height: 100%;
 }
 </style>
